@@ -6,9 +6,16 @@ import os
 def extract_pdf_text(pdf_path):
     text = ""
 
-    with fitz.open(pdf_path) as pdf:
-        for page in pdf:
-            text += page.get_text()
+    doc = fitz.open(pdf_path)
+
+    print("Pages:", len(doc))
+
+    for i, page in enumerate(doc):
+        page_text = page.get_text("text")
+        print(f"Page {i+1} characters:", len(page_text))
+        text += page_text
+
+    doc.close()
 
     return text
 

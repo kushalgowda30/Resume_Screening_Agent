@@ -1,0 +1,28 @@
+Software Engineer
+
+Required Skills:
+Python
+Django
+REST API
+Git
+GitHub
+SQL
+Problem Solving
+
+Preferred Skills:
+Machine Learning
+React
+Docker
+AWS
+
+Education:
+Bachelor's Degree
+
+Experience:
+0-2 Years
+
+Responsibilities:
+Develop backend services
+Build REST APIs
+Write clean code
+Work with databases
