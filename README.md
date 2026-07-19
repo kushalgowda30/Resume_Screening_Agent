@@ -22,6 +22,11 @@ An AI-powered Resume Screening Dashboard built using Python and Streamlit.
 - PyMuPDF
 - Scikit-learn
 
+## Recent Update (19 July 2026)
+
+- Improved project documentation.
+- Updated project structure.
+
 ## Installation
 
 ```bash
