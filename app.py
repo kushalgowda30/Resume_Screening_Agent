@@ -130,6 +130,14 @@ if st.button("🚀 Analyze Resumes"):
     df = pd.DataFrame(results)
     df = df.sort_values("Score", ascending=False).reset_index(drop=True)
 
+    # Clean candidate names
+    df["Candidate"] = (
+    df["Resume"]
+    .str.replace("_Resume.pdf", "", regex=False)
+    .str.replace(".pdf", "", regex=False)
+    .str.replace("_", " ")
+    )
+    
     df.insert(0, "Rank", range(1, len(df) + 1))
 
     # Save results in session
@@ -145,7 +153,7 @@ if st.button("🚀 Analyze Resumes"):
     # Metrics
     highest = df.iloc[0]["Score"]
     average = round(df["Score"].mean(), 2)
-    best = df.iloc[0]["Resume"]
+    best = df.iloc[0]["Candidate"]
     total = len(df)
 
     col1, col2, col3, col4 = st.columns(4)
@@ -153,11 +161,11 @@ if st.button("🚀 Analyze Resumes"):
     col1.metric("📄 Total", total)
     col2.metric("🏆 Highest", f"{highest:.2f}%")
     col3.metric("📈 Average", f"{average:.2f}%")
-    col4.metric("🥇 Best", best)
+    col4.metric("🥇 Best Candidate", best)
 
-    st.info(
-    f"🏆 Best Candidate: **{best}** with **{highest:.2f}%** match."
-    )
+    st.success(
+    f"🏆 Best Candidate: **{best}** achieved **{highest:.2f}%** compatibility with the Job Description."
+)
 
     st.divider()
 
@@ -184,8 +192,8 @@ if st.button("🚀 Analyze Resumes"):
 
     if search:
         filtered_df = filtered_df[
-            filtered_df["Resume"].str.contains(search, case=False)
-        ]
+    filtered_df["Candidate"].str.contains(search, case=False)
+]
 
     if recommendation_filter != "All":
         filtered_df = filtered_df[
@@ -196,7 +204,9 @@ if st.button("🚀 Analyze Resumes"):
         filtered_df["Score"] >= minimum_score
     ]
 
-    display_df = filtered_df.drop(columns=["ResumeText"])
+    display_df = filtered_df[
+    ["Rank", "Candidate", "Score", "Recommendation"]
+]
 
     st.dataframe(
     display_df,
@@ -214,18 +224,20 @@ if st.button("🚀 Analyze Resumes"):
     fig = px.bar(
     df.head(10),
     x="Score",
-    y="Resume",
+    y="Candidate",
     orientation="h",
     color="Score",
-    text=df.head(10)["Score"].round(2),
+    text="Score",
     title="Top 10 Candidates"
 )
 
     fig.update_layout(
+        
     height=700,
     font=dict(size=14),
     title_x=0.5
 )
+    fig.update_traces(texttemplate="%{text:.2f}%", textposition="outside")
 
     st.plotly_chart(fig, use_container_width=True)
 
@@ -258,7 +270,9 @@ if st.button("🚀 Analyze Resumes"):
 
     excel_path = "output/screening_results.xlsx"
 
-    export_df = df.drop(columns=["ResumeText"])
+    export_df = df[
+    ["Rank", "Candidate", "Score", "Recommendation"]
+]
 
     export_df.to_excel(excel_path, index=False)
 
