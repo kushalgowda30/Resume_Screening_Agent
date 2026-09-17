@@ -44,4 +44,4 @@ Resume_Screening_Agent/
 
 ## Author
 
-**Suhas Gowda**
+**Kushal Gowda**
